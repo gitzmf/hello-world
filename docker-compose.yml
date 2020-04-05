@@ -1,0 +1,6 @@
+version: '3'
+services:
+  hello-world:  # 指定服务名称
+    build: .    # 指定Dockerfile所在目录
+    ports:      # 指定端口映射
+      - "9000:9000"
