@@ -1,0 +1,136 @@
+# 这里是指的是K8S API的版本，目前基本上是v1，可以用kubectl  api-versions命令查询
+apiVersion: v1
+# 这里指的是yaml文件定义的资源类型和角色，比如：Pod
+kind: Pod
+# 元数据对象，固定值就写metadata
+metadata:
+  # 元数据对象的名字，这里由我们编写，比如命名Pod的名字
+  name: string
+  # 元数据对象的命名空间，由我们自身定义
+  namespace: string
+  # 将元通过Labels元数据附加到Kubernetes对象
+  labels:
+    - name: string
+  # 将元通过annotations元数据附加到Kubernetes对象
+  annotations:
+    - name: string
+# 详细定义对象，固定值就写Spec
+spec:
+  # 这里是Spec对象的容器列表定义，是个列表
+  containers:
+    # 这里定义容器的名字
+    - name: string
+      # 这里定义要用到的镜像名称
+      image: string
+      # 定义镜像拉取策略，有Always、Never、IfNotPresent三个值可选
+      #（1）Always：意思是每次都尝试重新拉取镜像
+      #（2）Never：表示仅使用本地镜像
+      #（3）IfNotPresent：如果本地有镜像就使用本地镜像，没有就拉取在线镜像。
+      # 上面三个值都没设置的话，默认是Always。
+      imagePullPolicy: [Always | Never | IfNotPresent]
+      # 指定容器启动命令，因为是数组可以指定多个，不指定则使用镜像打包时使用的启动命令。
+      command: [string]
+      # 指定容器启动命令参数，因为是数组可以指定多个。
+      args: [string]
+      # 指定容器的工作目录
+      workingDir: string
+      # 指定容器内部的存储卷配置
+      volumeMounts:
+        # 指定可以被容器挂载的存储卷的名称
+        - name: string
+          # 指定可以被容器挂载的存储卷的路径
+          mountPath: string
+          # 设置存储卷路径的读写模式，ture 或者false，默认为读写模式
+          readOnly: boolean
+      # 指定容器需要用到的端口列表
+      ports:
+        # 指定端口名称
+        - name: string
+          # 指定容器需要监听的端口号
+          containerPort: int
+          # 指定容器所在主机需要监听的端口号，默认跟上面containerPort相同，注意设置了hostPort 同一台主机无法启动该容器的相同副本（因为主机的端口号不能相同，这样会冲突）
+          hostPort: int
+          # 指定端口协议，支持TCP和UDP，默认值为TCP
+          protocol: string
+      # 指定容器运行前需设置的环境变量列表
+      env:
+        # 指定环境变量名称
+        - name: string值
+          # 指定环境变量
+          value: string
+      # 指定资源限制和资源请求的值（这里开始就是设置容器的资源上限）
+      resources:
+        # 指定设置容器运行时资源的运行上限
+        limits:
+          # 指定CPU的限制，单位为core数，将用于 docker run  --cpu-shares参数（这里前面文章Pod资源限制有讲过）
+          cpu: string
+          # 指定MEM内存的限制，单位为MIB、GiB
+          memory: string
+        # 指定容器启动和调度时的限制设置
+        requests:
+          # CPU请求，单位为core数，容器启动时初始化可用数量
+          cpu: string
+          # 内存请求，单位为MIB、GiB，容器启动的初始化可用数量
+          memory: string
+      # 指定Pod内容器健康检查的设置，当探测无响应几次后，系统将自动重启该容器。这个在前面的文章中有说，具体可以设置：exec、httpGet、tcpSocket。
+      livenessProbe:
+        # 指定Pod内容器健康检查的设置，确定是exec方式
+        exec:
+          # 指定exec方式后需要指定命令或者脚本，用这个参数设置
+          command: [string]
+        # 指定Pod内容器健康检查的设置，确定是httpGet方式
+        httpGet:
+          path: string
+          port: int
+          host: string
+          scheme: string
+          httpHeaders:
+            - name: string
+              value: string
+        # 指定Pod内容器健康检查的设置，确定是tcpSocket方式
+        tcpSocket:
+          port: int
+        # 容器启动完成后手册探测的时间设置，单位为s
+        initialDelaySeconds: number
+        # 对容器健康检查的探测等待响应的超时时间设置，单位为S，默认为1s。若超过该超时时间设置，则认为该容器不健康，会重启该容器。
+        timeoutSeconds: number
+        # 对容器健康检查的定期探测时间设置，单位为S，默认10s探测一次。
+        periodSeconds: number
+        successThreshold: 0
+        failureThreshold: 0
+      securityContext:
+        privileged: false
+  # 定义Pod的重启策略，可选值为Always、OnFailure，默认值为Always。
+  # 1.Always：Pod一旦终止运行，则无论容器是如何终止的，kubelet服务都将重启它。
+  # 2.OnFailure：只有Pod以非零退出码终止时，kubelet才会重启该容器。如果容器正常结束（退出码为0），则kubelet将不会重启它。
+  # 3. Never：Pod终止后，kubelet将退出码报告给Master，不会重启该Pod。
+  restartPolicy: [Always | Never | OnFailure]
+  # 定义Node的Label过滤标签，以key:value格式指定
+  nodeSelector: object
+  # 定义pull镜像时使用secret名称，以name:secretkey格式指定
+  imagePullSecrets:
+    - name: string
+  # 定义是否使用主机网络模式，默认值为false。设置true表示使用宿主机网络，不使用docker网桥，同时设置了true将无法在同一台宿主机上启动第二个副本。
+  hostNetwork: false
+  # 定义同步存储方面的参数
+  volumes:
+    # 定义Pod的共享存储卷的名称，容器定义部分的spec.containers[].volumeMounts[].name的值跟这里是一样的。
+    - name: string
+      # 指定Pod的临时目录，值为一个空对象：emptyDir:{}
+      emptyDir: {}
+      # 指定挂载Pod所在宿主机的目录
+      hostPath:
+        # 指定Pod所在主机的目录，将被用于容器中mount的目录
+        path: string
+      # 指定类型为secret的存储卷，secret意为私密、秘密的意思，很容易理解，它存储一些密码，token或者秘钥等敏感安全文件。挂载集群预定义的secret对象到容器内部。
+      secret:
+        secretName: string
+        items:
+          - key: string
+            path: string
+      # 指定类型为configMap的存储卷，表示挂载集群预定义的configMap对象到容器内部。
+      configMap:
+        name: string
+        items:
+          - key: string
+            path: string

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: string
+  labels:
+    - name: string
+  namespace: string
+spec:
+  replicas: 3
+  selector:
+    name: string
+  template:
+    metadata:
+      labels:
+        - name: string
+    spec:
+      containers:
+        - name: string
+          image: string
+          ports:
+            - containerPort: 6379
+
+

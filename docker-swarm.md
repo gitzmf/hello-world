@@ -38,6 +38,9 @@ Swarm集群由管理节点（manager）和工作节点（work node）构成。
    docker-machine ssh swarm-worker1
    # 指定为工作节点
    docker swarm join --token SWMTKN-1-4oogo9qziq768dma0uh3j0z0m5twlm10iynvz7ixza96k6jh9p-ajkb6w7qd06y1e33yrgko64sk 192.168.199.140:2377
+   # 查看manager节点token
+   # 会打印出如何增加manager节点的命令
+   docker swarm join-token manager
    ``` 
 4. 查看集群信息
    ```$xslt2

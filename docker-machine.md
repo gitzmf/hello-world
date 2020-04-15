@@ -69,11 +69,11 @@ Docker Machine 也可以集中管理所有的docker主机。
    linux 空间不够了，怎么办？
    1> 查看空间多少:df -h
    2> 查看当期内核: uname -r
-   3> 查找内核 ? rpm -qa | grep kernel
+   3> 查找内核 rpm -qa | grep kernel
    4> 删除多余的内核
    su -c 'yum remove kernel-devel-2.6.32-431.20.3.el6.i686'
-   5> 删除系统日志 ?rm -rf ?/var/log/*
-   6> 删除 ?rm -rf ?/usr/local/src ? ?注意这里可能存在你安装的文件
+   5> 删除系统日志 rm -rf /var/log/*
+   6> 删除 rm -rf /usr/local/src 注意这里可能存在你安装的文件
    ```
    查看磁盘扩展情况
    ```xslt2
