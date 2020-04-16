@@ -36,6 +36,8 @@ Docker Machine 也可以集中管理所有的docker主机。
     source bash_complate.sh
     # 提示wget命令不存在，进行安装
     yum install wget
+	# 脚本下载完成后，需要执行在bash终端中运行脚本来告诉安装程序在哪里可以找到先前下载的 docker-machine-prompt.bash 文件
+	source /etc/bash_completion.d/docker-machine-prompt.bash，
     #  要启用docker-machine外壳程序提示，$(__docker_machine_ps1)请PS1在中添加 设置~/.bashrc。          
     PS1='[\u@\h \W$(__docker_machine_ps1)]\$ ' 
     ```   
