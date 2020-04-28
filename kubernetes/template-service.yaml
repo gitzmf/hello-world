@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: string
+  namespace: string
+  labels:
+    name: string
+  annotations:
+    name: string
+spec:
+  selector:
+    - name: string
+  type: string
+  clusterIP: string
+  sessionAffinity: string
+  ports:
+    - name: string
+      protocol: string
+      port: int
+      targetPort: int
+      nodePort: int
+status:
+  loadBalancer:
+    ingress:
+      - ip: 146.148.47.155

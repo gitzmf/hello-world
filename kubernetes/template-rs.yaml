@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicaSet
+metadata:
+  name: string
+  labels:
+    - name: string
+  namespace: string
+spec:
+  replicas: 3
+  selector:
+    # 基于equality的标签选择器
+    matchLabels:
+      name: string
+    # 基于集合的标签选择器
+    matchExpressions:
+      - {key: tier, operator: In, values: [frontend]}
+  template:
+    metadata:
+      labels:
+        - name: string
+    spec:
+      containers:
+        - name: string
+          image: string
+          ports:
+            - containerPort: 6379
+
+
